@@ -11,6 +11,9 @@ var roundScore ;
 // Shooni ali talaaraa buusaniig hadgalah huvisagch, 1-6 gesen utgiig ene huvisagchid sanamsarguigeer uusgej ugnu.
 var diceNumber;
 
+// Togloom duussan esehiig shalgadag tuluv-g hadgalah huvisagch;
+var isGameOver;
+
 // Shoonii zurgiig DOM-s olj hadgalah
 var diceDom = document.querySelector('.dice');
 
@@ -19,6 +22,7 @@ initGame();
 
 // Togloom shineer ehlehed beldey.
 function initGame() {
+    isGameOver =  false;
     activePlayer = 0;
     scores = [0, 0];
     roundScore = 0;
@@ -42,40 +46,51 @@ function initGame() {
 
 // ROLLDICE tovchnii event listener
 document.querySelector('.btn-roll').addEventListener('click', function() {
-    // 1-6 hultel sanamsargui toog uusgeh
-    var diceNumber = Math.floor(Math.random() * 6) + 1;
-    
-    // shoonii zurgiig web derr gargana
-    diceDom.style.display = "block";
+   if (isGameOver === false) {
+        // 1-6 hultel sanamsargui toog uusgeh
+        var diceNumber = Math.floor(Math.random() * 6) + 1;
+            
+        // shoonii zurgiig web derr gargana
+        diceDom.style.display = "block";
 
-    // buusan toonii zurgiig web deer gargana
-    diceDom.src = "dice-" + diceNumber + '.png';
+        // buusan toonii zurgiig web deer gargana
+        diceDom.src = "dice-" + diceNumber + '.png';
 
-    // buusan toon ni 1-s ylgaatai bol, idevhitei toglogchiig onoog nemegduulne
-    if(diceNumber !== 1) {
-        // 1-s ylgaatai onoo buusan tul toglogchiin onoog nemne
-        roundScore =  roundScore + diceNumber;
-        document.getElementById('current-' + activePlayer).textContent = roundScore;
-    } else {
-        // 1 buusan tul toglogchiin eeljiig solih
-     switchToNextPlayer(); // DRY: DON'T REPEAT YOURSELF
-    }
+        // buusan toon ni 1-s ylgaatai bol, idevhitei toglogchiig onoog nemegduulne
+        if(diceNumber !== 1) {
+            // 1-s ylgaatai onoo buusan tul toglogchiin onoog nemne
+            roundScore =  roundScore + diceNumber;
+            document.getElementById('current-' + activePlayer).textContent = roundScore;
+        } else {
+            // 1 buusan tul toglogchiin eeljiig solih
+        switchToNextPlayer(); // DRY: DON'T REPEAT YOURSELF
+        }
+   } else {
+        alert('Togloom duussan baina!. NEW GAME tovchiig darj shine togloom ehluulne uu!.');
+   }
 });
 
 // HOLD tovchnii event listener
 document.querySelector('.btn-hold').addEventListener('click', function() {
-        // eeljiin onoog toglogchiin global onoon deer nemeh
-        scores[activePlayer] = scores[activePlayer] + roundScore;
-        document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
-
-        // Ug toglogch hojson elehiig shalgah
-        if ( scores[activePlayer] >= 20) {
-            document.getElementById('name-' + activePlayer).textContent = 'WINNER!!!';
-            document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
-            document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
-        } else {
-            switchToNextPlayer();
-        }
+    if(isGameOver === false) {
+            // eeljiin onoog toglogchiin global onoon deer nemeh
+            scores[activePlayer] = scores[activePlayer] + roundScore;
+            document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
+    
+            // Ug toglogch hojson elehiig shalgah
+            if ( scores[activePlayer] >= 10) {
+                document.getElementById('name-' + activePlayer).textContent = 'WINNER!!!';
+                document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+                document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+                
+                // Togloom-n tuluv-iig uurchluh
+                isGameOver =  true;
+            } else {
+                switchToNextPlayer();
+            }
+    } else {
+        alert('Togloom duussan baina!. NEW GAME tovchiig darj shine togloom ehluulne uu!.');
+    }
 });
 
 // NEW GAME tovchnii event listener
