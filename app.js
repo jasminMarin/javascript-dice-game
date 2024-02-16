@@ -1,23 +1,44 @@
+// Togloomiin olon gazar ashiglagdah global huvisagchdiig zarlah
 // Toglogchiin eeljiig hadgalah huvisagch, negdugeer toglogchiig 0, hoyrdugaar toglogchiig 1 gej temdegley,
-var activePlayer = 0;
+var activePlayer;
 
 // Toglogchdiin tsugluulsan onoog hadgalah huvisagch
-var scores = [0, 0];
+var scores;
 
 // Toglogchdiin eeljinde tsugluulj baigaa onoog hadgalah huvisagch
-var roundScore = 0;
+var roundScore ;
 
 // Shooni ali talaaraa buusaniig hadgalah huvisagch, 1-6 gesen utgiig ene huvisagchid sanamsarguigeer uusgej ugnu.
-var diceNumber = Math.floor(Math.random() * 6) + 1;
+var diceNumber;
 
-// Togloom ehlehed beldey.
-document.getElementById('score-0').textContent = "0"; // olon fain hurdan hurdan. 
-document.getElementById('score-1').textContent = "0";
-document.getElementById('current-0').textContent = "0";
-document.getElementById('current-1').textContent = "0";
 // Shoonii zurgiig DOM-s olj hadgalah
 var diceDom = document.querySelector('.dice');
-diceDom.style.display = "none";
+
+// Togloomiig ehluulne
+initGame();
+
+// Togloom shineer ehlehed beldey.
+function initGame() {
+    activePlayer = 0;
+    scores = [0, 0];
+    roundScore = 0;
+    diceNumber = Math.floor(Math.random() * 6) + 1;
+    document.getElementById('score-0').textContent = "0"; // olon dahin hurdan hurdan. 
+    document.getElementById('score-1').textContent = "0";
+    document.getElementById('current-0').textContent = "0";
+    document.getElementById('current-1').textContent = "0";
+
+    // Toglogchdiin neriig butsaaj anhnii helbert oruuulah
+    document.getElementById('name-0').textContent = 'Player 1';
+    document.getElementById('name-1').textContent = 'Player 2';
+    document.querySelector('.player-0-panel').classList.remove('winner');
+    document.querySelector('.player-1-panel').classList.remove('winner');
+    document.querySelector('.player-0-panel').classList.remove('active');
+    document.querySelector('.player-1-panel').classList.remove('active');
+
+    document.querySelector('.player-0-panel').classList.add('active');
+    diceDom.style.display = "none";
+}
 
 // ROLLDICE tovchnii event listener
 document.querySelector('.btn-roll').addEventListener('click', function() {
@@ -52,11 +73,13 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
             document.getElementById('name-' + activePlayer).textContent = 'WINNER!!!';
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
             document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
-            // document.querySelector('.btn-roll').classList.add('inactive');
         } else {
             switchToNextPlayer();
         }
 });
+
+// NEW GAME tovchnii event listener
+document.querySelector('.btn-new').addEventListener('click', initGame);
 
 // Ene funkts ni togloh eeljiig daraachiin toglogch ru shiljuulne
 function switchToNextPlayer() {
@@ -72,8 +95,3 @@ function switchToNextPlayer() {
    // 1-buusnii daraa shoog tur alga bolgoh
    diceDom.style.display = 'none';
 }
-
-// NEW GAME tovchnii event listener
-document.querySelector('.btn-new').addEventListener('click', function() {
-    alert('clicked');
-});
